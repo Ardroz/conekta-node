@@ -10,5 +10,8 @@
     "conekta"
   ],
   "author": "dfectuoso",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "superagent": "^1.0.0"
+  }
 }

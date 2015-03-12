@@ -1,6 +1,7 @@
-var superagent = require('superagent');
+var superagent = require('superagent'),
+  create_client;
 
-var create_client = function(privateKey) {
+create_client = function (privateKey) {
   var conekta = {};
 
   conekta.private = privateKey;
@@ -20,31 +21,35 @@ var create_client = function(privateKey) {
       .end(callback);
   }
 
-  conekta.addCardToCustomer = function(customerId, cardToken, callback){
-    conekta.makeRequest('post', 'customers/' + customerId + '/cards/', { token: cardToken, }, callback)
-  }
-
-  conekta.setCardAsActive = function(customerId, cardId, callback){
-    conekta.makeRequest('put',  customerId , {default_card_id: cardId,}, callback)
-  }
-
-  conekta.charge = function(customerId, amount, description, callback){
-    var data = {
-      card : customerId,
-      amount : amount,
-      description : description
+  conekta.Customer = {
+    addCard: function(customerId, cardToken, callback){
+      conekta.makeRequest('post', 'customers/' + customerId + '/cards/', { token: cardToken }, callback);
+    },
+    create: function(customer, callback){
+      conekta.makeRequest('post', 'customers/', customer, callback);
+    },
+    getCreditCards: function(customerId, callback){
+      conekta.makeRequest('get', '/customers/' + customerId, {}, callback);
+    },
+    setCardAsActive: function(customerId, cardId, callback){
+      conekta.makeRequest('put',  customerId , {default_card_id: cardId,}, callback);
     }
-    conekta.makeRequest('post', '/charges', data, callback)
   }
 
-  conekta.getCreditCardsForCustomer = function(customerId, callback){
-    conekta.makeRequest('get', '/customers/' + customerId, {}, callback)
-  }
+  conekta.Charge = {
+    create: function(customerId, amount, description, callback){
+      var data = {
+        card : customerId,
+        amount : amount,
+        description : description
+      }
+      conekta.makeRequest('post', '/charges', data, callback);
+    }
+  };
 
   return conekta;
 }
 
 module.exports = {
-    init: create_client
+  init: create_client
 };
-
