@@ -6,7 +6,7 @@ create_client = function (privateKey) {
 
   conekta.private = privateKey;
 
-  conekta.makeRequest = function(method, endpoint, data, callback){
+  conekta.makeRequest = function (method, endpoint, data, callback){
     method = (method || "").toLowerCase();
     if(['get', 'post', 'put'].indexOf(method) === -1){
       return callback(new Error('Unsupported method'));
@@ -19,7 +19,7 @@ create_client = function (privateKey) {
       .set('Accept', 'application/vnd.conekta-v1.0.0+json')
       .send(data)
       .end(callback);
-  }
+  };
 
   conekta.Customer = {
     addCard: function(customerId, cardToken, callback){
@@ -32,23 +32,18 @@ create_client = function (privateKey) {
       conekta.makeRequest('get', '/customers/' + customerId, {}, callback);
     },
     setCardAsActive: function(customerId, cardId, callback){
-      conekta.makeRequest('put',  customerId , {default_card_id: cardId,}, callback);
+      conekta.makeRequest('put',  customerId , { default_card_id: cardId }, callback);
     }
-  }
+  };
 
   conekta.Charge = {
-    create: function(customerId, amount, description, callback){
-      var data = {
-        card : customerId,
-        amount : amount,
-        description : description
-      }
-      conekta.makeRequest('post', '/charges', data, callback);
+    create: function(charge, callback){
+      conekta.makeRequest('post', '/charges', charge, callback);
     }
   };
 
   return conekta;
-}
+};
 
 module.exports = {
   init: create_client
