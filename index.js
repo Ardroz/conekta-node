@@ -8,7 +8,7 @@ create_client = function (privateKey) {
 
   conekta.makeRequest = function (method, endpoint, data, callback){
     method = (method || "").toLowerCase();
-    if(['get', 'post', 'put'].indexOf(method) === -1){
+    if(['get', 'post', 'put', 'del'].indexOf(method) === -1){
       return callback(new Error('Unsupported method'));
     }
 
@@ -28,8 +28,12 @@ create_client = function (privateKey) {
     create: function(customer, callback){
       conekta.makeRequest('post', 'customers/', customer, callback);
     },
+    deleteCard: function(customerId, cardId, callback){
+      var url = 'customers/' + customerId + '/cards/' + cardId + '/';
+      conekta.makeRequest('del', url, {}, callback);
+    },
     getCreditCards: function(customerId, callback){
-      conekta.makeRequest('get', '/customers/' + customerId, {}, callback);
+      conekta.makeRequest('get', 'customers/' + customerId, {}, callback);
     },
     setCardAsActive: function(customerId, cardId, callback){
       conekta.makeRequest('put',  customerId , { default_card_id: cardId }, callback);
@@ -38,7 +42,7 @@ create_client = function (privateKey) {
 
   conekta.Charge = {
     create: function(charge, callback){
-      conekta.makeRequest('post', '/charges', charge, callback);
+      conekta.makeRequest('post', 'charges', charge, callback);
     }
   };
 
