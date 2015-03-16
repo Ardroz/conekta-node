@@ -22,7 +22,7 @@ create_client = function (privateKey) {
   };
 
   conekta.Customer = {
-    addCard: function(customerId, cardToken, callback){
+    addCard: function(customerId, cardToken, callback) {
       conekta.makeRequest('post', 'customers/' + customerId + '/cards/', { token: cardToken }, callback);
     },
     create: function(customer, callback){
@@ -36,7 +36,7 @@ create_client = function (privateKey) {
       conekta.makeRequest('get', 'customers/' + customerId, {}, callback);
     },
     setCardAsActive: function(customerId, cardId, callback){
-      conekta.makeRequest('put',  customerId , { default_card_id: cardId }, callback);
+      conekta.makeRequest('put',  'customers/' + customerId , { default_card_id: cardId }, callback);
     }
   };
 
